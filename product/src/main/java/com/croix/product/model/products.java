@@ -8,35 +8,37 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public class products {
+public class Products {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_product;
 
-    @NotNull(message = "")
-    @Size(min = 1, max = 100, message = "")
+    @NotNull(message = "Valor SKU no puede ser nulo")
+    @Size(min = 1, max = 100, message = "SKU debe tener entre 1 y 100 caracteres")
     private String sku;
 
-    @NotNull(message = "")
-    @Size(min = 1, max = 100, message = "")
+    @NotNull(message = "Valor name no puede ser nulo")
+    @Size(min = 1, max = 100, message = "name debe tener entre 1 y 100 caracteres")
     private String name;
 
-    @Min(value = 0, message = "")
+    @Min(value = 0, message = "Valor price no puede ser negativo")
+    @Max(value = 999999999, message = "Valor price no puede ser superior a 999999999")
     private Long price;
 
-    @Min(value = 0, message = "")
-    @Max(value = 100, message = "")
+    @Min(value = 0, message = "Valor discount no puede ser negativo")
+    @Max(value = 100, message = "Valor discount debe estar entre 0 y 100")
     private int discount;
 
-    @NotNull(message = "")
-    @Size(min = 1, max = 100, message = "")
+    @NotNull(message = "Valor category no puede ser nulo")
+    @Size(min = 1, max = 100, message = "category debe tener entre 1 y 100 caracteres")
     private String category;
 
-    @NotNull(message = "")
-    @Size(min = 1, max = 1000, message = "")
+    @NotNull(message = "Valor description no puede ser nulo")
+    @Size(min = 1, max = 1000, message = "description debe tener entre 1 y 1000 caracteres")
     private String description;
 
-    @Min(value = 0, message = "")
+    @Min(value = 0, message = "Valor de stock no puede ser negativo")
+    @Max(value = 999999, message = "Valor stock no puede ser superior a 999999")
     private int stock;
 
     public Long getId_product() {
