@@ -11,6 +11,7 @@ import jakarta.validation.constraints.Size;
 
 @Entity
 public class Products {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_product;
@@ -43,68 +44,83 @@ public class Products {
     @Max(value = 999999, message = "Valor stock no puede ser superior a 999999")
     private int stock;
 
-    public Long getId_product() {
-        return id_product;
+    protected Products() {
     }
 
-    public void setId_product(Long id_product) {
-        this.id_product = id_product;
+    private Products(Builder builder) {
+        this.id_product = builder.id_product;
+        this.sku = builder.sku;
+        this.name = builder.name;
+        this.price = builder.price;
+        this.discount = builder.discount;
+        this.category = builder.category;
+        this.description = builder.description;
+        this.stock = builder.stock;
     }
 
-    public String getSku() {
-        return sku;
+    public Long getId_product() { return id_product; }
+    public String getSku() { return sku; }
+    public String getName() { return name; }
+    public Long getPrice() { return price; }
+    public int getDiscount() { return discount; }
+    public String getCategory() { return category; }
+    public String getDescription() { return description; }
+    public int getStock() { return stock; }
+
+    public static class Builder {
+        private Long id_product;
+        private String sku;
+        private String name;
+        private Long price;
+        private Integer discount;
+        private String category;
+        private String description;
+        private int stock;
+
+        public Products build() {
+            return new Products(this);
+        }
+
+        public Builder setId_product(Long id_product) {
+            this.id_product = id_product;
+            return this;
+        }
+
+        public Builder setSku(String sku) {
+            this.sku = sku;
+            return this;
+        }
+
+        public Builder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder setPrice(Long price) {
+            this.price = price;
+            return this;
+        }
+
+        public Builder setDiscount(Integer discount) {
+            this.discount = discount;
+            return this;
+        }
+
+        public Builder setCategory(String category) {
+            this.category = category;
+            return this;
+        }
+
+        public Builder setDescription(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public Builder setStock(int stock) {
+            this.stock = stock;
+            return this;
+        }
+        
     }
 
-    public void setSku(String sku) {
-        this.sku = sku;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Long getPrice() {
-        return price;
-    }
-
-    public void setPrice(Long price) {
-        this.price = price;
-    }
-
-    public int getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(int discount) {
-        this.discount = discount;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public int getStock() {
-        return stock;
-    }
-
-    public void setStock(int stock) {
-        this.stock = stock;
-    }
-    
 }

@@ -62,15 +62,18 @@ public class ProductController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Products> updateProduct(@PathVariable Long id, @Valid @RequestBody Products updatedProduct ) {
-        Products product = productService.getProductById(id)
+        Products foundProduct = productService.getProductById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Producto con ID "+ id +" no se encuentra"));
-        product.setCategory(updatedProduct.getCategory());
-        product.setDescription(updatedProduct.getDescription());
-        product.setDiscount(updatedProduct.getDiscount());
-        product.setName(updatedProduct.getName());
-        product.setPrice(updatedProduct.getPrice());
-        product.setSku(updatedProduct.getSku());
-        product.setStock(updatedProduct.getStock());
+        Products product = new Products.Builder()
+            .setId_product(foundProduct.getId_product())
+            .setCategory(updatedProduct.getCategory())
+            .setDescription(updatedProduct.getDescription())
+            .setDiscount(updatedProduct.getDiscount())
+            .setName(updatedProduct.getName())
+            .setPrice(updatedProduct.getPrice())
+            .setSku(updatedProduct.getSku())
+            .setStock(updatedProduct.getStock())
+            .build();
         Products resultProduct = productService.saveProduct(product);
         return ResponseEntity.ok(resultProduct);
     }
