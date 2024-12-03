@@ -53,8 +53,7 @@ public class SecurityConfig {
                 registry.addMapping("/**")
                         .allowedOrigins("http://18.228.19.20")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") 
-                        .allowedHeaders("Authorization", "Content-Type")
-                        .allowCredentials(true);
+                        .allowedHeaders("Authorization", "Content-Type");
             }
         };
     }
