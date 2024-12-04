@@ -5,57 +5,56 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import jakarta.servlet.http.HttpServletResponse;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+import java.util.List;
+
 @Configuration
-@EnableWebSecurity
 public class SecurityConfig {
 
     @Autowired
     private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.OPTIONS, "/management/product/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/management/product/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/management/product/**").permitAll()//.hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/management/product/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/management/product/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/management/product/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
-                .exceptionHandling(ex -> 
-                    ex.authenticationEntryPoint(customAuthenticationEntryPoint)
-                    .accessDeniedHandler(accessDeniedHandler())
-                )
+                .exceptionHandling(ex -> ex.authenticationEntryPoint(customAuthenticationEntryPoint)
+                        .accessDeniedHandler(accessDeniedHandler()))
                 .httpBasic(withDefaults())
                 .build();
     }
 
     @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                        .allowedOrigins("http://18.228.19.20")
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") 
-                        .allowedHeaders("Authorization", "Content-Type");
-            }
-        };
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of("*"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 
     @Bean
