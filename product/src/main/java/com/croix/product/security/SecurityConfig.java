@@ -33,8 +33,8 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/management/product/**").permitAll()//.hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.OPTIONS, "/management/product/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/management/product/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/management/product/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/management/product/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/management/product/**").hasRole("ADMIN")
@@ -48,7 +48,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("*"));
+        config.setAllowedOrigins(List.of("http://localhost:4200", "http://172.31.39.30:4200"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
