@@ -1,5 +1,4 @@
 com\croix\product\service\ProductService.class
-com\croix\product\security\SecurityConfig$1.class
 com\croix\product\model\Products$Builder.class
 com\croix\product\ProductApplication.class
 com\croix\product\exception\GlobalExceptionHandler.class
